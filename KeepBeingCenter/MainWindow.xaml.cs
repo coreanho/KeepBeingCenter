@@ -24,5 +24,29 @@ namespace KeepBeingCenter
 		{
 			InitializeComponent();
 		}
+
+		private async void PlayButtonClicked(object sender, RoutedEventArgs e)
+		{
+			OpenCvSharp.VideoCapture video = new OpenCvSharp.VideoCapture("sample1.mp4");
+
+			OpenCvSharp.Mat image = new OpenCvSharp.Mat();
+
+			while (video.Read(image))
+			{
+				ImageSource = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToBitmapSource(image);
+				await Task.Delay(1);
+			}
+
+		}
+
+		public BitmapSource ImageSource
+		{
+			get { return (BitmapSource)GetValue(ImageSourceProperty); }
+			set { SetValue(ImageSourceProperty, value); }
+		}
+
+		private static readonly DependencyProperty ImageSourceProperty =
+			DependencyProperty.Register(nameof(ImageSource), typeof(BitmapSource), typeof(MainWindow), new PropertyMetadata());
+
 	}
 }
