@@ -12,13 +12,33 @@
                 <RowDefinition/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <Image Source="{Binding ImageSource}"/>
+            <Image x:Name="ImageCanvas" Source="{Binding ImageSource}" Stretch="Fill"/>
+            <Canvas x:Name="Canvas_DrawingROI" Background="Transparent" MouseEnter="CanvasDraw_MouseEnter" MouseLeave="CanvasDraw_MouseLeave" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" MouseRightButtonDown="CanvasDraw_MouseRightButtonDown" MouseMove="Canvas_MouseMove">
+                <Canvas.Style>
+                    <Style TargetType="Canvas">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDisplayROI, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsDisplayROI, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Value="False">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Canvas.Style>
+                <Line x:Name="lineCanvasWidth" Stroke="Red" StrokeThickness="1"/>
+                <Line x:Name="lineCanvasHeight" Stroke="Red" StrokeThickness="1"/>
+                <Rectangle x:Name="rectCanvas" Stroke="Lime" StrokeThickness="1"/>
+            </Canvas>
             <Slider Grid.Row="1" IsEnabled="False" Maximum="{Binding MaxFrame}" Value="{Binding PresentFrame}"/>
         </Grid>
 
         <Button Content="Open Video" HorizontalAlignment="Left" Margin="330,10,0,0" VerticalAlignment="Top" Click="OpenVideoClicked"/>
 
-        <Button Content="Play" HorizontalAlignment="Left" Margin="583,0,0,0" VerticalAlignment="Center" Click="PlayButtonClicked"/>
-        <Button Content="Stop" HorizontalAlignment="Left" Margin="580,232,0,0" VerticalAlignment="Top" Click="StopButtonClicked"/>
+        <Button Content="Play" HorizontalAlignment="Left" Margin="330,35,0,0" VerticalAlignment="Top" Click="PlayButtonClicked"/>
+        <Button Content="Stop" HorizontalAlignment="Left" Margin="330,60,0,0" VerticalAlignment="Top" Click="StopButtonClicked"/>
+
+        <CheckBox Content="Show Target ROI" HorizontalAlignment="Left" Margin="329,370,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDisplayROI}"/>
+        <Button Content="Get Target Image" HorizontalAlignment="Center" Margin="0,390,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsDisplayROI}"/>
     </Grid>
 </Window>
