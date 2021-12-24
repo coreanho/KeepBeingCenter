@@ -39,6 +39,7 @@
         <Button Content="Stop" HorizontalAlignment="Left" Margin="330,60,0,0" VerticalAlignment="Top" Click="StopButtonClicked"/>
 
         <CheckBox Content="Show Target ROI" HorizontalAlignment="Left" Margin="329,370,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDisplayROI}"/>
-        <Button Content="Get Target Image" HorizontalAlignment="Center" Margin="0,390,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsDisplayROI}"/>
+        <Button Content="Get Target Image" HorizontalAlignment="Center" Margin="0,390,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsDisplayROI}" Click="GetTargetImageClicked"/>
+        <Image Source="{Binding TargetSource}" HorizontalAlignment="Left" Height="72" Margin="464,341,0,0" VerticalAlignment="Top" Width="73"/>
     </Grid>
 </Window>

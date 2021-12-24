@@ -90,6 +90,15 @@ namespace KeepBeingCenter
 		private static readonly DependencyProperty ImageSourceProperty =
 			DependencyProperty.Register(nameof(ImageSource), typeof(BitmapSource), typeof(MainWindow), new PropertyMetadata());
 
+		public BitmapSource TargetSource
+		{
+			get { return (BitmapSource)GetValue(TargetSourceProperty); }
+			set { SetValue(TargetSourceProperty, value); }
+		}
+
+		private static readonly DependencyProperty TargetSourceProperty =
+			DependencyProperty.Register(nameof(TargetSource), typeof(BitmapSource), typeof(MainWindow), new PropertyMetadata());
+
 		public int PresentFrame
 		{
 			get { return (int)GetValue(PresentFrameProperty); }
@@ -286,6 +295,17 @@ namespace KeepBeingCenter
 				(int)Math.Round(externalROI.Y / (ImageSource.Height / ImageCanvas.ActualHeight)), // Y
 				(int)Math.Round(externalROI.Width / (ImageSource.Width / ImageCanvas.ActualWidth)), // Width
 				(int)Math.Round(externalROI.Height / (ImageSource.Height / ImageCanvas.ActualHeight))); // Height
+		}
+
+		private void GetTargetImageClicked(object sender, RoutedEventArgs e)
+		{
+			if (InternalROI.IsEmpty) return;
+
+			var externalROI = GetROIForExternal(InternalROI);
+
+			if (ImageSource == null) return;
+
+			TargetSource = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToBitmapSource(OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToMat(ImageSource)[new OpenCvSharp.Rect(externalROI.X, externalROI.Y, externalROI.Width, externalROI.Height)]);
 		}
 	}
 }
