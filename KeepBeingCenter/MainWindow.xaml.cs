@@ -25,18 +25,31 @@ namespace KeepBeingCenter
 			InitializeComponent();
 		}
 
+		private bool isStopRequest = false;
 		private async void PlayButtonClicked(object sender, RoutedEventArgs e)
 		{
 			OpenCvSharp.VideoCapture video = new OpenCvSharp.VideoCapture("sample1.mp4");
 
+			MaxFrame = video.FrameCount;
+
 			OpenCvSharp.Mat image = new OpenCvSharp.Mat();
+
+			int currentFrame = 0;
 
 			while (video.Read(image))
 			{
+				PresentFrame = currentFrame++;
 				ImageSource = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToBitmapSource(image);
+				
+				if (currentFrame > MaxFrame || isStopRequest) break;
+
 				await Task.Delay(1);
 			}
+		}
 
+		private void StopButtonClicked(object sender, RoutedEventArgs e)
+		{
+			isStopRequest = true;
 		}
 
 		public BitmapSource ImageSource
@@ -48,5 +61,22 @@ namespace KeepBeingCenter
 		private static readonly DependencyProperty ImageSourceProperty =
 			DependencyProperty.Register(nameof(ImageSource), typeof(BitmapSource), typeof(MainWindow), new PropertyMetadata());
 
+		public int PresentFrame
+		{
+			get { return (int)GetValue(PresentFrameProperty); }
+			set { SetValue(PresentFrameProperty, value); }
+		}
+
+		private static readonly DependencyProperty PresentFrameProperty =
+			DependencyProperty.Register(nameof(PresentFrame), typeof(int), typeof(MainWindow), new PropertyMetadata());
+
+		public int MaxFrame
+		{
+			get { return (int)GetValue(MaxFrameProperty); }
+			set { SetValue(MaxFrameProperty, value); }
+		}
+
+		private static readonly DependencyProperty MaxFrameProperty =
+			DependencyProperty.Register(nameof(MaxFrame), typeof(int), typeof(MainWindow), new PropertyMetadata());
 	}
 }
