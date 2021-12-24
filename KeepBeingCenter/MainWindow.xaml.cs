@@ -25,22 +25,51 @@ namespace KeepBeingCenter
 			InitializeComponent();
 		}
 
+		private OpenCvSharp.VideoCapture video = new OpenCvSharp.VideoCapture();
 		private bool isStopRequest = false;
+
+		private void OpenVideoClicked(object sender, RoutedEventArgs e)
+		{
+			Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+
+			dialog.Filter = "Video|*.*";
+
+			if (dialog.ShowDialog().GetValueOrDefault())
+			{
+				if (video.Open(dialog.FileName) == false)
+				{
+					MessageBox.Show($"Video load failed.");
+				}
+				else
+				{
+					MaxFrame = video.FrameCount;
+
+					OpenCvSharp.Mat image = new OpenCvSharp.Mat();
+
+					video.PosFrames = video.FrameCount / 2;
+
+					video.Read(image);
+
+					ImageSource = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToBitmapSource(image);
+				}
+			}
+		}
+
 		private async void PlayButtonClicked(object sender, RoutedEventArgs e)
 		{
-			OpenCvSharp.VideoCapture video = new OpenCvSharp.VideoCapture("sample1.mp4");
-
-			MaxFrame = video.FrameCount;
-
 			OpenCvSharp.Mat image = new OpenCvSharp.Mat();
 
 			int currentFrame = 0;
+
+			isStopRequest = false;
+
+			video.PosFrames = 0;
 
 			while (video.Read(image))
 			{
 				PresentFrame = currentFrame++;
 				ImageSource = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToBitmapSource(image);
-				
+
 				if (currentFrame > MaxFrame || isStopRequest) break;
 
 				await Task.Delay(1);

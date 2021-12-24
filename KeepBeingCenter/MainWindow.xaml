@@ -15,6 +15,9 @@
             <Image Source="{Binding ImageSource}"/>
             <Slider Grid.Row="1" IsEnabled="False" Maximum="{Binding MaxFrame}" Value="{Binding PresentFrame}"/>
         </Grid>
+
+        <Button Content="Open Video" HorizontalAlignment="Left" Margin="330,10,0,0" VerticalAlignment="Top" Click="OpenVideoClicked"/>
+
         <Button Content="Play" HorizontalAlignment="Left" Margin="583,0,0,0" VerticalAlignment="Center" Click="PlayButtonClicked"/>
         <Button Content="Stop" HorizontalAlignment="Left" Margin="580,232,0,0" VerticalAlignment="Top" Click="StopButtonClicked"/>
     </Grid>
