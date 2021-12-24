@@ -305,7 +305,15 @@ namespace KeepBeingCenter
 
 			if (ImageSource == null) return;
 
-			TargetSource = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToBitmapSource(OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToMat(ImageSource)[new OpenCvSharp.Rect(externalROI.X, externalROI.Y, externalROI.Width, externalROI.Height)]);
+			OpenCvSharp.Mat targetImage = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToMat(ImageSource)[new OpenCvSharp.Rect(externalROI.X, externalROI.Y, externalROI.Width, externalROI.Height)];
+
+			TargetSource = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToBitmapSource(targetImage);
+
+			var ORB = OpenCvSharp.ORB.Create();
+
+			OpenCvSharp.Mat output = new OpenCvSharp.Mat();
+
+			ORB.DetectAndCompute(targetImage, null, out OpenCvSharp.KeyPoint[] keyPoints, output);
 		}
 	}
 }
